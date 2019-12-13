@@ -31,15 +31,19 @@ void setup() {
 
   // inserisci qui l'SSID e la password del WiFi
   WiFiMulti.addAP("Telecom-56475423", "Red_Home1234"); 
-  
+  Serial.println("mi sono connesso");
   pinMode(inPin, INPUT);
 }
 
-void loop(){
+void loop()
+{
   reading = digitalRead(inPin);
-
+  
+  // if the input just went from LOW and HIGH and we've waited long enough
+  // to ignore any noise on the circuit, toggle the output pin and remember
+  // the time
   if (reading == HIGH && previous == LOW) {
-       if ((WiFiMulti.run() == WL_CONNECTED)) {
+      if ((WiFiMulti.run() == WL_CONNECTED)) {
         WiFiClient client;
         HTTPClient http;
         Serial.print("[HTTP] begin...\n");
@@ -62,7 +66,7 @@ void loop(){
           Serial.printf("[HTTP} Unable to connect\n");
         }
       }
-      //Serial.println(state);
-    }
-    previous = reading;
- }
+      Serial.println(state);
+  }
+  previous = reading;
+}
