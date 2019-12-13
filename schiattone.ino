@@ -30,13 +30,12 @@ void setup() {
   WiFi.mode(WIFI_STA);
 
   // inserisci qui l'SSID e la password del WiFi
-  WiFiMulti.addAP("VodafoneMobileWiFi-E55000", "6325144321"); 
+  WiFiMulti.addAP("Telecom-56475423", "Red_Home1234"); 
   
   pinMode(inPin, INPUT);
 }
 
-void loop()
-{
+void loop(){
   reading = digitalRead(inPin);
 
   if (reading == HIGH && previous == LOW) {
@@ -65,7 +64,5 @@ void loop()
       }
       //Serial.println(state);
     }
-  }
-  
-  previous = reading;
-}
+    previous = reading;
+ }
