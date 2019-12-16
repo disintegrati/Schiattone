@@ -6,7 +6,8 @@
 
 ESP8266WiFiMulti WiFiMulti;
 
-int inPin = 12;   
+int inPin = 12; 
+int outPin = 0;   
 int state = HIGH;      // the current state of the output pin
 int reading;           // the current reading from the input pin
 int previous = LOW;    // the previous reading from the input pin
@@ -25,14 +26,28 @@ void setup() {
     Serial.flush();
     delay(1000);
   }
-  
-  // disabilito l'access point dell'ESP8266
-  WiFi.mode(WIFI_STA);
 
-  // inserisci qui l'SSID e la password del WiFi
-  WiFiMulti.addAP("Telecom-56475423", "Red_Home1234"); 
-  Serial.println("mi sono connesso");
+   // We start by connecting to a WiFi network
+  WiFi.mode(WIFI_STA);
+  WiFi.hostname("wemosbutton");
+  
+  WiFiMulti.addAP("Callo", "Callofduty5"); 
+  Serial.println();
+  Serial.println();
+  Serial.print("Wait for WiFi... ");
+
+  while (WiFiMulti.run() != WL_CONNECTED) {
+    Serial.print(".");
+    delay(500);
+  }
+
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+ 
   pinMode(inPin, INPUT);
+  pinMode(outPin, OUTPUT);
 }
 
 void loop()
@@ -47,7 +62,7 @@ void loop()
         WiFiClient client;
         HTTPClient http;
         Serial.print("[HTTP] begin...\n");
-        if (http.begin(client, "http://battito.cuoredinapoli.net/setStatus")) {  // HTTP
+        if (http.begin(client, "http://battito.cuoredinapoli.net/setStatusTrue")) {  // HTTP
           Serial.print("[HTTP] GET...\n");
           // start connection and send HTTP header
           int httpCode = http.GET();
@@ -69,4 +84,9 @@ void loop()
       Serial.println(state);
   }
   previous = reading;
+  if ( WiFi.status() != WL_CONNECTED) {
+    digitalWrite(outPin, LOW);
+  }else{
+    digitalWrite(outPin, HIGH);
+  }
 }
